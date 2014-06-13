@@ -79,8 +79,7 @@ public class LotteryResource {
                     generateMessage(to, from, lotteryString);
                     Say genLottery = new Say ("Your lucky lottery numbers are sent to you");
                     twiml.append(genLottery);
-                } catch (TwilioRestException e) {
-                    // todo, need to handle more exceptions
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
