@@ -10,7 +10,7 @@ public class LotteryNumberGeneratorTest {
     @Test
     public void testLotteryNumberGenerator() {
         LotteryNumberGenerator generator = new LotteryNumberGenerator();
-        int[] generated = generator.generateLottery();
+        int[] generated = generator.generateLottery(1357);
         // should generate 6 lottery numbers
         Assert.assertEquals(6, generated.length);
 

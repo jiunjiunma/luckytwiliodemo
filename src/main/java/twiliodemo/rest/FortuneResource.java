@@ -22,7 +22,7 @@ public class FortuneResource {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public String getGreeting(@DefaultValue("1234") @QueryParam("Digits") String digits) {
+    public String getFortune(@DefaultValue("1234") @QueryParam("Digits") String digits) {
 
         String fortune = fortuneService.getFortune(0L);
 
@@ -31,7 +31,7 @@ public class FortuneResource {
         Pause pause = new Pause();
         pause.setLength(1);
         Gather gather = new Gather();
-        gather.setAction("/api/lottery");
+        gather.setAction("/api/lottery?LuckyNumber="+digits);
         gather.setNumDigits(1);
         gather.setMethod("GET");
         Say sayInGather = new Say("Press 0 to hear your lucky lottery number. " +

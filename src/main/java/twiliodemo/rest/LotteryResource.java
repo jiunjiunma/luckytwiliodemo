@@ -27,16 +27,11 @@ import java.util.List;
 @Path("/lottery")
 public class LotteryResource {
 
-    private int[] getLuckyLottery() {
-        return lotteryGenerator.generateLottery();
-    }
-
     @Autowired
     private LotteryNumberGenerator lotteryGenerator;
 
     @Autowired
     private TwilioRestClient twilioClient;
-
 
     private void generateMessage(String from, String to, String body) throws TwilioRestException {
 
@@ -54,10 +49,12 @@ public class LotteryResource {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public String getGreeting(@QueryParam("From") String from,
-                              @QueryParam("To") String to,
-                              @DefaultValue("0") @QueryParam("Digits") String digits) {
+    public String getLottery(@QueryParam("From") String from,
+                             @QueryParam("To") String to,
+                             @DefaultValue("0") @QueryParam("Digits") String digits,
+                             @DefaultValue("1234") @QueryParam("LuckyNumber") int luckyNumber) {
 
+        System.out.println("lucky number = " + luckyNumber);
         TwiMLResponse twiml = new TwiMLResponse();
         Say goodBye = new Say("Good luck and good bye!");
         Pause pause = new Pause();
@@ -66,14 +63,14 @@ public class LotteryResource {
             if ("0".equals(digits)) {
                 Say lotteryNumber = new Say("Your lucky lottery numbers are ");
                 twiml.append(lotteryNumber);
-                for (Integer num: getLuckyLottery()) {
+                for (Integer num: lotteryGenerator.generateLottery(luckyNumber)) {
                     twiml.append(pause);
                     twiml.append(new Say(num.toString()));
                 }
                 twiml.append(pause);
             } else if ("1".equals(digits)) {
                 String lotteryString =
-                    lotteryGenerator.generateLotteryInString();
+                    lotteryGenerator.generateLotteryInString(luckyNumber);
                 try {
                     System.out.println("from=" + from  + " to=" + to);
                     generateMessage(to, from, lotteryString);
